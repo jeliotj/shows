@@ -23,7 +23,7 @@ exports.show_list = asyncHandler(async (req, res, next) => {
 });
 
 exports.show_detail = asyncHandler(async (req, res, next) => {
-  const show = await Promise.all([
+  const [show] = await Promise.all([
     Show.findById(req.params.id).exec(),
   ]);
 

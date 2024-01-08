@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'KBMF Shows' });
+  res.redirect('/lineup');
 });
 
 module.exports = router;

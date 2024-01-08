@@ -2,17 +2,42 @@ const Show = require('../models/show');
 const asyncHandler = require('express-async-handler');
 
 exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Site Home Page");
+  const numBooks = await Promise.all([
+    Show.countDocuments({}).exec()
+
+  ]);
+
+  res.render('index', {
+    title: 'KBMF Shows',
+    show_count: numBooks,
+  });
 });
 
 // Display list of all shows.
 exports.show_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Show list");
+  const allShows = await Show.find({}, 'show_name dj day')
+  .sort({ show_name: 1 })
+  .exec();
+
+  res.render('show_list', { title: 'Show List', show_list: allShows });
 });
 
-// Display detail page for a specific show.
 exports.show_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Show detail: ${req.params.id}`);
+  const show = await Promise.all([
+    Show.findById(req.params.id).exec(),
+  ]);
+
+  if (show === null) {
+    // No results.
+    const err = new Error("Show not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("show_detail", {
+    title: show.show_name,
+    show: show,
+  });
 });
 
 // Display show create form on GET.

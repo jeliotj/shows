@@ -2,4 +2,11 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #[em KBMFShows]
+
+  h1 Dynamic content
+
+  p We have the following record counts:
+
+  ul
+    li #[strong Shows:] !{show_count}

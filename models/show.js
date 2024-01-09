@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ShowSchema = new Schema({
-  _id: { type: Number },
   show_name: { type: String, required: true, maxLength: 100 },
   dj: { type: String, required: true, maxLength: 100 }, 
   day: { type: String, required: true, maxLength: 12 },

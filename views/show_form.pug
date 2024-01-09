@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method='POST')
+    div.form-group
+      label(for='show_name') Show Name:
+      input#show_name.form-control(type='text', placeholder='Full name of show' name='show_name' required value=(undefined===show ? '' : show.show_name) )
+    div.form-group
+      label(for='dj') DJ Name:
+      input#dj.form-control(type='text', placeholder='DJ name' name='dj' required value=(undefined===show ? '' : show.dj) )
+    div.form-group
+      label(for='day') Day of Week:
+      input#day.form-control(type='text', placeholder='Day of week' name='day' required value=(undefined===show ? '' : show.day) )
+    div.form-group
+      label(for='start_time') Start Time:
+      input#start_time.form-control(type='time', name='start_time' required)
+    div.form-group
+      label(for='end_time') End Time:
+      input#end_time.form-control(type='time', name='end_time' required)
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg

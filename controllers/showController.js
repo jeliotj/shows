@@ -91,20 +91,92 @@ exports.show_create_post = [
 
 // Display show delete form on GET.
 exports.show_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Show delete GET");
+  const [show] = await Promise.all([
+    Show.findById(req.params.id).exec()
+  ]);
+
+  if (show === null) {
+    res.redirect('/lineup/shows');
+  }
+
+  res.render('show_delete', {
+    title: 'Delete Show',
+    show: show,
+  });
+
 });
 
 // Handle show delete on POST.
 exports.show_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Show delete POST");
+
+  await Show.findByIdAndDelete(req.body.showid);
+  res.redirect('/lineup/shows');
 });
 
 // Display show update form on GET.
 exports.show_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Show update GET");
+  const [show] = await Promise.all([
+    Show.findById(req.params.id).exec()
+  ]);
+
+  if (show === null) {
+    const err = new Error('Show Not Found');
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render('show_form', {
+    title: 'Update Show',
+    show: show,
+  });
 });
 
 // Handle show update on POST.
-exports.show_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Show update POST");
-});
+exports.show_update_post = [
+  body("show_name", "Show name must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("dj", "Dj name must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("day", "Day must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("start_time", "Start time must not be empty"),
+  body("end_time", "End time must not be empty"),
+
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a Book object with escaped/trimmed data and old id.
+    const show = new Show({
+      show_name: req.body.show_name,
+      dj: req.body.dj,
+      day: req.body.day,
+      start_time: req.body.start_time,
+      end_time: req.body.end_time,
+      _id: req.params.id, // This is required, or a new ID will be assigned!
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+
+      res.render("show_form", {
+        title: "Update Show",
+        show: show,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      const updatedShow = await Show.findByIdAndUpdate(req.params.id, show, {});
+      // Redirect to book detail page.
+      res.redirect(updatedShow.url);
+    }
+  }),
+];

@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  
+  h1 #{show_name}
+
+  p Do you really want to delete this show?
+
+  form(method='POST')
+    div.form-group
+      input#showid.form-control(type='hidden', name='showid', value=show._id)
+    button.btn.btn-primary(type='submit') Delete

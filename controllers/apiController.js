@@ -52,3 +52,20 @@ exports.show_create_post = [
     }
   }),
 ];
+
+exports.show_delete_get = asyncHandler(async (req, res, next) => {
+  const [show] = await Promise.all([
+    Show.findById(req.params.id).exec()
+  ]);
+
+  if (show === null) {
+    res.send("No show found!")
+  }
+
+  res.json({show});
+});
+
+exports.show_delete_post = asyncHandler(async (req, res, next) => {
+  await Show.findByIdAndDelete(req.body.showid);
+  res.send('Successfully Deleted Show');
+});

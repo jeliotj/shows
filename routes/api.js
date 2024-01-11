@@ -9,4 +9,9 @@ router.get('/shows', api_controller.show_list);
 
 router.post('/shows/create', api_controller.show_create_post);
 
+router.get('/shows/:id/delete', api_controller.show_delete_get);
+
+router.post('/shows/:id/delete', api_controller.show_delete_post);
+
+
 module.exports = router;

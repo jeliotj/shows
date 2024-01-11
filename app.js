@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 mongoose.set('strictQuery', false);
 const db = 'mongodb://127.0.0.1:27017/kbmf';
@@ -18,6 +19,8 @@ const lineupRouter = require('./routes/lineup');
 const apiRouter = require('./routes/api')
 
 const app = express();
+
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -7,4 +7,6 @@ router.get('/', api_controller.index);
 
 router.get('/shows', api_controller.show_list);
 
+router.post('/shows/create', api_controller.show_create_post);
+
 module.exports = router;

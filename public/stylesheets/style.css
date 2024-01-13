@@ -142,12 +142,18 @@ table {
 .lineup-table td {
   padding: 5px;
   font-size: 1.25rem;
-  border: 1px dotted var(--old-gold);
+  border-top: 1px dotted var(--old-gold);
+  border-bottom: 1px dotted var(--old-gold);
+
 }
 
 .lineup-table th {
   padding-top: 8px;
   padding-bottom: 8px;
+}
+
+.lineup-table th:hover {
+  color: var(--old-gold);
 }
 
 .show-name {

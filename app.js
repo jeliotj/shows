@@ -53,7 +53,7 @@ passport.deserializeUser(async (id, done) => {
 // const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const lineupRouter = require('./routes/lineup');
-const apiRouter = require('./routes/api');
+// const apiRouter = require('./routes/api');
 
 const app = express();
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
@@ -75,7 +75,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/lineup', lineupRouter);
-app.use('/api', apiRouter);
+// app.use('/api', apiRouter);
 
 
 // catch 404 and forward to error handler

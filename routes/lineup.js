@@ -4,7 +4,6 @@ const router = express.Router();
 // Require controller modules.
 const show_controller = require("../controllers/showController");
 
-
 // GET lineup home page.
 router.get("/", show_controller.index);
 
@@ -30,7 +29,7 @@ router.post("/show/:id/update", show_controller.show_update_post);
 router.get("/show/:id", show_controller.show_detail);
 
 // GET request for list of all Show items.
-router.get("/shows", show_controller.show_list);
+// router.get("/shows", show_controller.show_list);
 
 module.exports = router;
 

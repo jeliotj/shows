@@ -2,11 +2,13 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #[em KBMFShows]
 
-  h1 Dynamic content
+  div(class='lineup-info')
+    p #[strong Number of Shows:] !{show_count}
+  div(class='show-list')
+    ul
+      each show in show_list
+        li
+          a(href=show.url) #{show.show_name}
+          |  - #{show.dj}
 
-  p We have the following record counts:
-
-  ul
-    li #[strong Shows:] !{show_count}

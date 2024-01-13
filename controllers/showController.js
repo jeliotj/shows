@@ -3,24 +3,18 @@ const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 
 exports.index = asyncHandler(async (req, res, next) => {
-  const numBooks = await Promise.all([
-    Show.countDocuments({}).exec()
-
+  const [numShows, allShows] = await Promise.all([
+    Show.countDocuments({}).exec(),
+    Show.find({}, 'show_name dj day')
+      .sort({ show_name: 1 })
+      .exec(),
   ]);
 
   res.render('index', {
-    title: 'KBMF Shows',
-    show_count: numBooks,
+    title: 'KBMF Show Lineup',
+    show_count: numShows,
+    show_list: allShows,
   });
-});
-
-// Display list of all shows.
-exports.show_list = asyncHandler(async (req, res, next) => {
-  const allShows = await Show.find({}, 'show_name dj day')
-  .sort({ show_name: 1 })
-  .exec();
-
-  res.render('show_list', { title: 'Show List', show_list: allShows });
 });
 
 exports.show_detail = asyncHandler(async (req, res, next) => {

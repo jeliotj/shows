@@ -186,7 +186,7 @@ exports.user_login_post = [
     failureMessage: true,
   }),
   function (req, res) {
-    jwt.sign({ user: req.user }, 'secretkey', (err, token) => {
+    jwt.sign({ user: req.user }, 'secretkey', { expiresIn: '20m' }, (err, token) => {
       res.json({
         token,
       });

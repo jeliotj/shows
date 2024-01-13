@@ -5,13 +5,6 @@ block content
 
   div(class='lineup-info')
     p #[strong Number of Shows:] !{show_count}
-  //- div(class='show-list')
-    ul
-      each show in show_list
-        li
-          a(href=show.url) #{show.show_name}
-          |  - #{show.dj}
-  //
   div(class='lineup-table')
     table
       thead

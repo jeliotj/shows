@@ -102,9 +102,8 @@ exports.show_delete_get = asyncHandler(async (req, res, next) => {
 
 // Handle show delete on POST.
 exports.show_delete_post = asyncHandler(async (req, res, next) => {
-
   await Show.findByIdAndDelete(req.body.showid);
-  res.redirect('/lineup/shows');
+  res.redirect('/lineup');
 });
 
 exports.show_update_get = asyncHandler(async (req, res, next) => {

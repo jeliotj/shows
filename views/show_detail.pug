@@ -4,13 +4,14 @@ block content
 
   h1 #{show.show_name}
 
-  p #[strong DJ: ] #{show.dj}
-  p #[strong Day: ] #{show.day}
-  p #[strong Start: ] #{show.start_time}
-  p #[strong End: ] #{show.end_time}
+  ul(class='show-detail-list')
+    li #[strong DJ: ] #{show.dj}
+    li #[strong Day: ] #{show.day}
+    li #[strong Start: ] #{show.start_time}
+    li #[strong End: ] #{show.end_time}
 
   hr
-  p
+  button(class='delete-btn')
     a(href=show.url+'/delete') Delete Show
-  p
+  button(class='update-btn')
     a(href=show.url+'/update') Update Show

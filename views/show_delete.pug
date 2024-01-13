@@ -6,7 +6,7 @@ block content
 
   p Do you really want to delete this show?
 
-  form(method='POST')
+  form(method='POST').delete-form
     div.form-group
       input#showid.form-control(type='hidden', name='showid', value=show._id)
-    button.btn.btn-primary(type='submit') Delete
+    button.delete-btn(type='submit') Delete

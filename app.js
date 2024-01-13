@@ -1,3 +1,4 @@
+require('dotenv').config();
 const createError = require('http-errors');
 const bcrypt = require('bcryptjs');
 const express = require('express');
@@ -50,17 +51,16 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // const indexRouter = require('./routes/index');
-// const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/users');
 const lineupRouter = require('./routes/lineup');
 const apiRouter = require('./routes/api');
 
 const app = express();
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(cors());
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -73,7 +73,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/', indexRouter);
-// app.use('/users', usersRouter);
+app.use('/users', usersRouter);
 app.use('/lineup', lineupRouter);
 app.use('/api', apiRouter);
 

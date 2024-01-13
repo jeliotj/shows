@@ -14,6 +14,7 @@ exports.index = asyncHandler(async (req, res, next) => {
     title: 'KBMF Show Lineup',
     show_count: numShows,
     show_list: allShows,
+    user: req.user,
   });
 });
 

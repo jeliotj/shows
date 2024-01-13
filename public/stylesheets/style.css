@@ -252,3 +252,9 @@ label {
 .delete-form {
   border: none;
 }
+
+.welcome {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--fire-brick);
+}

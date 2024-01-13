@@ -15,11 +15,11 @@ block content
       input#day.form-control(type='text', placeholder='Day of week' name='day' required value=(undefined===show ? '' : show.day) )
     div.form-group
       label(for='start_time') Start Time
-      input#start_time.form-control(type='time', name='start_time' required)
+      input#start_time.form-control(type='time', name='start_time' required value=(undefined===show ? '' : show.start_time) )
     div.form-group
       label(for='end_time') End Time
-      input#end_time.form-control(type='time', name='end_time' required)
-    button.btn.btn-primary(type='submit') Submit
+      input#end_time.form-control(type='time', name='end_time' required value=(undefined===show ? '' : show.end_time) )
+    button.submit-btn(type='submit') Submit
 
   if errors
     ul

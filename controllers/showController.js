@@ -107,7 +107,6 @@ exports.show_delete_post = asyncHandler(async (req, res, next) => {
   res.redirect('/lineup/shows');
 });
 
-// Display show update form on GET.
 exports.show_update_get = asyncHandler(async (req, res, next) => {
   const [show] = await Promise.all([
     Show.findById(req.params.id).exec()
@@ -125,7 +124,6 @@ exports.show_update_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-// Handle show update on POST.
 exports.show_update_post = [
   body("show_name", "Show name must not be empty.")
     .trim()
@@ -142,12 +140,9 @@ exports.show_update_post = [
   body("start_time", "Start time must not be empty"),
   body("end_time", "End time must not be empty"),
 
-  // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
-    // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create a Book object with escaped/trimmed data and old id.
     const show = new Show({
       show_name: req.body.show_name,
       dj: req.body.dj,
@@ -158,8 +153,6 @@ exports.show_update_post = [
     });
 
     if (!errors.isEmpty()) {
-      // There are errors. Render form again with sanitized values/error messages.
-
       res.render("show_form", {
         title: "Update Show",
         show: show,
@@ -167,9 +160,7 @@ exports.show_update_post = [
       });
       return;
     } else {
-      // Data from form is valid. Update the record.
       const updatedShow = await Show.findByIdAndUpdate(req.params.id, show, {});
-      // Redirect to book detail page.
       res.redirect(updatedShow.url);
     }
   }),

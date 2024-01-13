@@ -4,6 +4,7 @@ block content
   h1= title
 
   form(method='POST')
+    p.special-text *All fields are required*
     div.form-group
       label(for='show_name') Show Name
       input#show_name.form-control(type='text', placeholder='Full name of show' name='show_name' required value=(undefined===show ? '' : show.show_name) )
@@ -12,7 +13,14 @@ block content
       input#dj.form-control(type='text', placeholder='DJ name' name='dj' required value=(undefined===show ? '' : show.dj) )
     div.form-group
       label(for='day') Day of Week
-      input#day.form-control(type='text', placeholder='Day of week' name='day' required value=(undefined===show ? '' : show.day) )
+      select#day.form-control(name='day' required value=(undefined===show ? '' : show.day) )
+        option(value='Monday') Monday
+        option(value='Tuesday') Tuesday
+        option(value='Wednesday') Wednesday
+        option(value='Thursday') Thursday
+        option(value='Friday') Friday
+        option(value='Saturday') Saturday
+        option(value='Sunday') Sunday
     div.form-group
       label(for='start_time') Start Time
       input#start_time.form-control(type='time', name='start_time' required value=(undefined===show ? '' : show.start_time) )

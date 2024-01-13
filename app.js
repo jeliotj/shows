@@ -5,7 +5,6 @@ const passport = require('passport');
 const session = require('express-session');
 const LocalStrategy = require('passport-local');
 const path = require('path');
-// const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');

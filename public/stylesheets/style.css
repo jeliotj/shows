@@ -50,6 +50,7 @@
 
 html {
   font-family: 'Lato', Helvetica, Arial, sans-serif;
+  color: var(--bistre);
 }
 
 a {
@@ -188,6 +189,11 @@ label {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-weight: 700;
+}
+
+.special-text {
+  color: red;
   font-weight: 700;
 }
 

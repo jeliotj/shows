@@ -56,7 +56,7 @@ const lineupRouter = require('./routes/lineup');
 // const apiRouter = require('./routes/api');
 
 const app = express();
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true, cookie: { maxAge: 60*60*1000} }));
 app.use(passport.initialize());
 app.use(passport.session());
 

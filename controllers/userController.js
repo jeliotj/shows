@@ -12,7 +12,7 @@ exports.user_login_get = asyncHandler(async (req, res, next) => {
 
 exports.user_create_get = asyncHandler(async (req, res, next) => {
   res.render('signup', {
-    title: 'User Signup'
+    title: 'User Signup',
   });
 });
 
@@ -29,10 +29,7 @@ exports.user_create_post = [
     .isAlphanumeric()
     .withMessage('Last Name may only contain letters and numbers')
     .escape(),
-  body('email')
-    .trim()
-    .isEmail()
-    .escape(),
+  body('email').trim().isEmail().escape(),
   body('username')
     .trim()
     .isLength({ min: 6 })
@@ -49,15 +46,10 @@ exports.user_create_post = [
     .escape(),
 
   asyncHandler(async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.send({ errors });
-    }
-    bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-      if (err) {
-        throw err;
-      } else {
-        const user = new User({
+    let user;
+    if (req.user) {
+      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+        user = new User({
           username: req.body.username,
           password: hashedPassword,
           first_name: req.body.first_name,
@@ -65,9 +57,17 @@ exports.user_create_post = [
           email: req.body.email,
         });
         user.save();
-        res.sendStatus(200);
-      }
-    });
+        res.redirect('login');
+      });
+    }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.render('signup', {
+        title: 'Create New User',
+        user: user,
+        errors: errors.array(),
+      });
+    }
   }),
 ];
 
@@ -85,6 +85,6 @@ exports.user_logout_get = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/lineup");
+    res.redirect('/lineup');
   });
 };

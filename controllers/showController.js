@@ -5,32 +5,27 @@ const { body, validationResult } = require('express-validator');
 exports.index = asyncHandler(async (req, res, next) => {
   const [numShows, allShows] = await Promise.all([
     Show.countDocuments({}).exec(),
-    Show.find({}, 'show_name dj day')
-      .sort({ show_name: 1 })
-      .exec(),
+    Show.find({}, 'show_name dj day').sort({ show_name: 1 }).exec(),
   ]);
 
   res.render('index', {
     title: 'KBMF Show Lineup',
     show_count: numShows,
     show_list: allShows,
-    user: req.user,
   });
 });
 
 exports.show_detail = asyncHandler(async (req, res, next) => {
-  const [show] = await Promise.all([
-    Show.findById(req.params.id).exec(),
-  ]);
+  const [show] = await Promise.all([Show.findById(req.params.id).exec()]);
 
   if (show === null) {
     // No results.
-    const err = new Error("Show not found");
+    const err = new Error('Show not found');
     err.status = 404;
     return next(err);
   }
 
-  res.render("show_detail", {
+  res.render('show_detail', {
     title: show.show_name,
     show: show,
   });
@@ -38,26 +33,21 @@ exports.show_detail = asyncHandler(async (req, res, next) => {
 
 // Display show create form on GET.
 exports.show_create_get = asyncHandler(async (req, res, next) => {
-  res.render('show_form', { title: "Create New Show" });
+  if (req.user) {
+    res.render('show_form', { title: 'Create New Show' });
+  }
 });
 
 // Handle show create on POST.
 exports.show_create_post = [
-  
-  body("show_name", "Show Name must not be empty.")
+  body('show_name', 'Show Name must not be empty.')
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("dj", "DJ must not be empty.")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("day", "Day must not be empty.")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("start_time", "Start time must not be empty."),
-  body("end_time", "End time must not be empty."),
+  body('dj', 'DJ must not be empty.').trim().isLength({ min: 1 }).escape(),
+  body('day', 'Day must not be empty.').trim().isLength({ min: 1 }).escape(),
+  body('start_time', 'Start time must not be empty.'),
+  body('end_time', 'End time must not be empty.'),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -71,74 +61,70 @@ exports.show_create_post = [
     });
 
     if (!errors.isEmpty()) {
-
       res.render('show_form', {
         title: 'Create New Show',
         show: show,
         errors: errors.array(),
       });
     } else {
-      await show.save();
-      res.redirect(show.url);
+      if (req.user) {
+        await show.save();
+        res.redirect(show.url);
+      }
     }
   }),
 ];
 
 // Display show delete form on GET.
 exports.show_delete_get = asyncHandler(async (req, res, next) => {
-  const [show] = await Promise.all([
-    Show.findById(req.params.id).exec()
-  ]);
+  if (req.user) {
+    const [show] = await Promise.all([Show.findById(req.params.id).exec()]);
 
-  if (show === null) {
-    res.redirect('/lineup/shows');
+    if (show === null) {
+      res.redirect('/lineup/shows');
+    }
+
+    res.render('show_delete', {
+      title: 'Delete Show',
+      show: show,
+    });
   }
-
-  res.render('show_delete', {
-    title: 'Delete Show',
-    show: show,
-  });
-
 });
 
 // Handle show delete on POST.
 exports.show_delete_post = asyncHandler(async (req, res, next) => {
-  await Show.findByIdAndDelete(req.body.showid);
-  res.redirect('/lineup');
+  if (req.user) {
+    await Show.findByIdAndDelete(req.body.showid);
+    res.redirect('/lineup');
+  }
 });
 
 exports.show_update_get = asyncHandler(async (req, res, next) => {
-  const [show] = await Promise.all([
-    Show.findById(req.params.id).exec()
-  ]);
+  if (req.user) {
+    const [show] = await Promise.all([Show.findById(req.params.id).exec()]);
 
-  if (show === null) {
-    const err = new Error('Show Not Found');
-    err.status = 404;
-    return next(err);
+    if (show === null) {
+      const err = new Error('Show Not Found');
+      err.status = 404;
+      return next(err);
+    }
+
+    res.render('show_form', {
+      title: 'Update Show',
+      show: show,
+    });
   }
-
-  res.render('show_form', {
-    title: 'Update Show',
-    show: show,
-  });
 });
 
 exports.show_update_post = [
-  body("show_name", "Show name must not be empty.")
+  body('show_name', 'Show name must not be empty.')
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("dj", "Dj name must not be empty.")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("day", "Day must not be empty.")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("start_time", "Start time must not be empty"),
-  body("end_time", "End time must not be empty"),
+  body('dj', 'Dj name must not be empty.').trim().isLength({ min: 1 }).escape(),
+  body('day', 'Day must not be empty.').trim().isLength({ min: 1 }).escape(),
+  body('start_time', 'Start time must not be empty'),
+  body('end_time', 'End time must not be empty'),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
@@ -153,15 +139,21 @@ exports.show_update_post = [
     });
 
     if (!errors.isEmpty()) {
-      res.render("show_form", {
-        title: "Update Show",
+      res.render('show_form', {
+        title: 'Update Show',
         show: show,
         errors: errors.array(),
       });
       return;
     } else {
-      const updatedShow = await Show.findByIdAndUpdate(req.params.id, show, {});
-      res.redirect(updatedShow.url);
+      if (req.user) {
+        const updatedShow = await Show.findByIdAndUpdate(
+          req.params.id,
+          show,
+          {},
+        );
+        res.redirect(updatedShow.url);
+      }
     }
   }),
 ];

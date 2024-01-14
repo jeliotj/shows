@@ -16,8 +16,16 @@ html(lang='en')
           img(src='/images/undraw_happy_music_g6wc.svg' class='side-img')
           ul(class='sidebar-nav')
             li
-              a(href='/lineup') Home
-            li
-              a(href='/lineup/show/create') Create new show
+              a(href='/lineup') Show List
+            if currentUser
+              li
+                a(href='/lineup/show/create') Create New Show
+              li
+                a(href='/users/logout') Logout
+            else
+              li
+                a(href='/users/login') Login
+              li
+                a(href='/users/signup') Create New User
       div(class='mainarea')
-        block content
+                    block content

@@ -3,8 +3,8 @@ extends layout
 block content
   h1= title
 
-  if user
-    p.welcome Welcome Back !{user.username}!
+  if currentUser
+    p.welcome Welcome back !{currentUser.first_name}!
 
   div(class='lineup-info')
     p #[strong Number of Shows:] !{show_count}

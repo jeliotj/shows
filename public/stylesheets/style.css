@@ -76,6 +76,7 @@ li {
 .container {
   margin: 15px;
   display: grid;
+  gap: 5px;
   grid-template-columns: minmax(100px, 200px) 1fr;
 }
 

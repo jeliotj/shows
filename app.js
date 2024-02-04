@@ -12,7 +12,7 @@ const cors = require('cors');
 const User = require('./models/user');
 
 mongoose.set('strictQuery', false);
-const db = 'mongodb://127.0.0.1:27017/kbmf';
+const db = process.env.SHOWS_DB;
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(db);

@@ -4,7 +4,7 @@ block content
   h1= title
 
   if currentUser
-    p.welcome Greetings !{currentUser.first_name}!
+    p.welcome Hello !{currentUser.first_name}!
 
   div(class='lineup-info')
     p #[strong Number of Shows:] !{show_count}
@@ -18,6 +18,6 @@ block content
         each show in show_list
           tr
             td(class='show-name') 
-              a(href=show.url) #{show.show_name}
-            td #{show.dj}
+              a(href=show.url) !{show.show_name}
+            td !{show.dj}
 

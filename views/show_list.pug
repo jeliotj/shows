@@ -6,7 +6,7 @@ block content
     ul
       each show in show_list
         li
-          a(href=show.url) #{show.show_name}
+          a(href=show.url) !{show.show_name}
           |  - #{show.dj}
 
   else

@@ -10,7 +10,6 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const User = require('./models/user');
-const helmet = require('helmet');
 
 mongoose.set('strictQuery', false);
 const db = process.env.SHOWS_DB;
@@ -62,7 +61,6 @@ app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUniniti
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(helmet);
 app.use(cors());
 
 app.use((req, res, next) => {

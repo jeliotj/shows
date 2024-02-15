@@ -1,6 +1,23 @@
 const Show = require('../models/show');
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
+const { spawn } = require('node:child_process');
+
+
+function newShowCron(start, end, day) {
+  const cronjob = spawn('../bin/shows.sh', ['-o', startHour, '-m', startMin, '-e', endHour, '-n', dayNum, '-d', weekdayName, '-l', length]);
+  cronjob.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  cronjob.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  cronjob.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  }); 
+}
 
 exports.index = asyncHandler(async (req, res, next) => {
   const [numShows, allShows] = await Promise.all([

@@ -8,6 +8,7 @@ function newShowCron(startHour, startMin, endHour, dayNum, weekdayName, length) 
     {
       cwd: undefined,
       env: process.env,
+      uid: 998,
     }
   );
   cronjob.stdout.on('data', (data) => {

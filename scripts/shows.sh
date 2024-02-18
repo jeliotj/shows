@@ -39,4 +39,5 @@ while getopts ":ho:m:e:n:d:l:" option; do
   esac
 done
 
-(crontab -l 2>/dev/null; echo "$START_MINUTE $START_HOUR * * $DAY timeout ${LENGTH}m /usr/local/bin/record.sh $WEEKDAY $START_HOUR $END_HOUR") | crontab -
+(crontab -l 2>/dev/null; echo "$START_MINUTE $START_HOUR * * $DAY timeout ${LENGTH}m /usr/local/bin/record.sh $WEEKDAY $START_HOUR $END_HOUR") | crontab - 
+echo "New crontab entry for show on ${WEEKDAY} at ${START_HOUR}:${START_MINUTE}" >> /home/jes/kbmf/shows/log/shows.log

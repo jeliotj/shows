@@ -3,8 +3,8 @@ const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const { spawn } = require('node:child_process');
 
-function newShowCron(startHour, startMin, endHour, dayNum, weekdayName, length) {
-  const cronjob = spawn('shows.sh', ['-o', startHour, '-m', startMin, '-e', endHour, '-n', dayNum, '-d', weekdayName, '-l', length],
+function newShowCron(showName, startHour, startMin, endHour, dayNum, weekdayName, length) {
+  const cronjob = spawn('shows.sh', ['-N', showName, '-o', startHour, '-m', startMin, '-e', endHour, '-n', dayNum, '-d', weekdayName, '-l', length],
     {
       cwd: undefined,
       env: process.env,
@@ -91,7 +91,7 @@ exports.show_create_post = [
     } else {
       if (req.user) {
         await show.save();
-        newShowCron(show.startHour, show.startMin, show.endHour, show.dayNum, show.day, show.length)
+        newShowCron(show.show_name, show.startHour, show.startMin, show.endHour, show.dayNum, show.day, show.length)
         res.redirect(show.url);
       }
     }

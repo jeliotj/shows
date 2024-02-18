@@ -1,12 +1,13 @@
 #!/bin/bash
 
-WEEKDAY=$1
-START_HOUR=$2
-END_HOUR=$3
+SHOWNAME=$1
+WEEKDAY=$2
+START_HOUR=$3
+END_HOUR=$4
 
 ROOTDIR='/home/www/html/shows/'
 TARGETDIR=${WEEKDAY}/${START_HOUR}-${END_HOUR}
-NEWFILE=$(date +\%Y-\%m-\%d).mp3
+NEWFILE=${SHOWNAME}-$(date +\%Y-\%m-\%d).mp3
 FULLPATH=${ROOTDIR}${TARGETDIR}
 
 if ! [ -d ${FULLPATH} ]; then

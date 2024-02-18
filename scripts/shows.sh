@@ -7,6 +7,7 @@ Help()
   echo
   echo "options:"
   echo "h    Print this Help."
+  echo "N    Show name"
   echo "o    Start hour"
   echo "m    Start minute"
   echo "e    End hour"
@@ -16,11 +17,13 @@ Help()
   echo
 }
 
-while getopts ":ho:m:e:n:d:l:" option; do
+while getopts ":h:N:o:m:e:n:d:l:" option; do
   case $option in
     h)
       Help
       exit;;
+    N)
+      SHOW_NAME=$OPTARG;;
     o)
       START_HOUR=$OPTARG;;
     m)
@@ -39,5 +42,5 @@ while getopts ":ho:m:e:n:d:l:" option; do
   esac
 done
 
-(crontab -l 2>/dev/null; echo "$START_MINUTE $START_HOUR * * $DAY timeout ${LENGTH}m /usr/local/bin/record.sh $WEEKDAY $START_HOUR $END_HOUR") | crontab - 
-echo "New crontab entry for show on ${WEEKDAY} at ${START_HOUR}:${START_MINUTE}" >> /home/jes/kbmf/shows/log/shows.log
+(crontab -l 2>/dev/null; echo "$START_MINUTE $START_HOUR * * $DAY timeout ${LENGTH}m /usr/local/bin/record.sh \"$SHOW_NAME\" $WEEKDAY $START_HOUR $END_HOUR") | crontab - 
+echo "New crontab entry called \"${SHOW_NAME}\" on ${WEEKDAY} at ${START_HOUR}:${START_MINUTE}" >> /home/jes/kbmf/shows/log/shows.log

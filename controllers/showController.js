@@ -72,8 +72,7 @@ exports.show_create_post = [
       if (name) {
         throw new Error('Show name already in use.');
       }
-
-    }),
+  }),
   body('dj', 'DJ must not be empty.').trim().isLength({ min: 1 }).escape(),
   body('day', 'Day must not be empty.').trim().isLength({ min: 1 }).escape(),
   body('start_time', 'Start time must not be empty.'),

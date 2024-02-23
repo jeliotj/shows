@@ -68,8 +68,8 @@ exports.show_create_post = [
     .escape(),
   body('show_name', 'Show Name must not already exist.')
     .custom(async value => {
-      const name = await Show.find({show_name: value});
-      if (name) {
+      const name = await Show.find({'show_name': value}).exec();
+      if (name.length !== 0) {
         throw new Error('Show name already in use.');
       }
   }),
@@ -187,3 +187,4 @@ exports.show_update_post = [
     }
   }),
 ];
+

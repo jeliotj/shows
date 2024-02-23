@@ -111,7 +111,7 @@ exports.show_delete_get = asyncHandler(async (req, res, next) => {
     const [show] = await Promise.all([Show.findById(req.params.id).exec()]);
 
     if (show === null) {
-      res.redirect('/lineup/shows');
+      res.redirect('/shows');
     }
 
     res.render('show_delete', {
@@ -125,7 +125,7 @@ exports.show_delete_get = asyncHandler(async (req, res, next) => {
 exports.show_delete_post = asyncHandler(async (req, res, next) => {
   if (req.user) {
     await Show.findByIdAndDelete(req.body.showid);
-    res.redirect('/lineup');
+    res.redirect('/');
   }
 });
 

@@ -12,7 +12,7 @@ const ShowSchema = new Schema({
 }, { collection: 'shows' });
 
 ShowSchema.virtual('url').get(function () {
-  return `/lineup/show/${this._id}`;
+  return `/show/${this._id}`;
 });
 
 ShowSchema.virtual('startHour').get(function () {

@@ -76,7 +76,7 @@ exports.user_login_post = [
     failureMessage: true,
   }),
   function (req, res) {
-    res.redirect('/lineup');
+    res.redirect('/');
   },
 ];
 
@@ -85,6 +85,6 @@ exports.user_logout_get = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect('/lineup');
+    res.redirect('/');
   });
 };

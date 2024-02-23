@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const LocalStrategy = require('passport-local');
 const path = require('path');
 const logger = require('morgan');
@@ -56,17 +57,31 @@ const lineupRouter = require('./routes/lineup');
 // const apiRouter = require('./routes/api');
 
 const app = express();
+app.use(cors());
 
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true, cookie: { maxAge: 60*60*1000} }));
+const sess = {
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: false,
+  resave: false,
+  store: MongoStore.create({ mongoUrl: process.env.SHOWS_DB }),
+  cookie: { maxAge: 36000000 },
+};
+
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1);
+  sess.cookie.secure = true;
+}
+
+app.use(session(sess));
+
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(cors());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

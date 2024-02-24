@@ -17,7 +17,7 @@ Help()
   echo
 }
 
-while getopts ":h:N:o:m:e:n:d:l:" option; do
+while getopts ":h:N:o:m:e:n:d:l:D" option; do
   case $option in
     h)
       Help
@@ -36,11 +36,24 @@ while getopts ":h:N:o:m:e:n:d:l:" option; do
       WEEKDAY=$OPTARG;;
     l)
       LENGTH=$OPTARG;;
+    D)
+      DELETE_USED=true;;
     \?)
       Help
       exit;;
   esac
 done
 
-(crontab -l 2>/dev/null; echo "$START_MINUTE $START_HOUR * * $DAY timeout ${LENGTH}m /usr/local/bin/record.sh \"$SHOW_NAME\" $WEEKDAY $START_HOUR $END_HOUR") | crontab - 
-echo "New crontab entry called \"${SHOW_NAME}\" on ${WEEKDAY} at ${START_HOUR}:${START_MINUTE}" >> /home/jes/kbmf/shows/log/shows.log
+Delete()
+{
+  (crontab -l 2>/dev/null | grep -v "\"$SHOW_NAME\"") | crontab -
+}
+
+if [ -v DELETE_USED ]; then
+  Delete
+  echo "Called delete function"
+else
+  (crontab -l 2>/dev/null; echo "$START_MINUTE $START_HOUR * * $DAY timeout ${LENGTH}m /usr/local/bin/record.sh \"$SHOW_NAME\" $WEEKDAY $START_HOUR $END_HOUR") | crontab - 
+  echo "Created new show"
+  echo "New crontab entry called \"${SHOW_NAME}\" on ${WEEKDAY} at ${START_HOUR}:${START_MINUTE}" >> /home/jes/kbmf/shows/log/shows.log
+fi

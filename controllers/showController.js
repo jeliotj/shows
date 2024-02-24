@@ -24,6 +24,27 @@ function newShowCron(showName, startHour, startMin, endHour, dayNum, weekdayName
   }); 
 }
 
+function deleteShowCron(showName) {
+  const delCronJob = spawn('shows.sh', ['-N', showName, '-D'],
+    {
+      cwd: undefined,
+      env: process.env,
+      uid: 998,
+    }
+  );
+  delCronJob.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  delCronJob.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  delCronJob.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  })
+}
+
 exports.index = asyncHandler(async (req, res, next) => {
   const [numShows, allShows] = await Promise.all([
     Show.countDocuments({}).exec(),
@@ -124,7 +145,9 @@ exports.show_delete_get = asyncHandler(async (req, res, next) => {
 // Handle show delete on POST.
 exports.show_delete_post = asyncHandler(async (req, res, next) => {
   if (req.user) {
-    await Show.findByIdAndDelete(req.body.showid);
+    const show = await Show.findById(req.body.showid);
+    await Show.findByIdAndDelete(show._id);
+    deleteShowCron(show.show_name);
     res.redirect('/');
   }
 });

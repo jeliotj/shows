@@ -47,11 +47,11 @@ done
 Delete()
 {
   (crontab -l 2>/dev/null | grep -v "\"$SHOW_NAME\"") | crontab -
+  echo "Deleted Show: $SHOW_NAME"
 }
 
 if [ -v DELETE_USED ]; then
   Delete
-  echo "Called delete function"
 else
   (crontab -l 2>/dev/null; echo "$START_MINUTE $START_HOUR * * $DAY timeout ${LENGTH}m /usr/local/bin/record.sh \"$SHOW_NAME\" $WEEKDAY $START_HOUR $END_HOUR") | crontab - 
   echo "Created new show"

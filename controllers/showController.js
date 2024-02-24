@@ -1,9 +1,9 @@
 const Show = require('../models/show');
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
-const { spawn } = require('node:child_process');
+const { spawn, spawnSync } = require('node:child_process');
 
-function newShowCron(showName, startHour, startMin, endHour, dayNum, weekdayName, length) {
+async function newShowCron(showName, startHour, startMin, endHour, dayNum, weekdayName, length) {
   const cronjob = spawn('shows.sh', ['-N', showName, '-o', startHour, '-m', startMin, '-e', endHour, '-n', dayNum, '-d', weekdayName, '-l', length],
     {
       cwd: undefined,
@@ -25,24 +25,26 @@ function newShowCron(showName, startHour, startMin, endHour, dayNum, weekdayName
 }
 
 function deleteShowCron(showName) {
-  const delCronJob = spawn('shows.sh', ['-N', showName, '-D'],
-    {
-      cwd: undefined,
-      env: process.env,
-      uid: 998,
-    }
-  );
-  delCronJob.stdout.on('data', (data) => {
-    console.log(`stdout: ${data}`);
-  });
+  return new Promise(function (resolve, reject) {
+    const delCronJob = spawn('shows.sh', ['-N', showName, '-D'],
+      {
+        cwd: undefined,
+        env: process.env,
+        uid: 998,
+      }
+    );
+    delCronJob.stdout.on('data', (data) => {
+      console.log(`stdout: ${data}`);
+    });
 
-  delCronJob.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-  });
+    delCronJob.stderr.on('data', (data) => {
+      console.error(`stderr: ${data}`);
+    });
 
-  delCronJob.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
-  })
+    delCronJob.on('close', (code) => {
+      resolve(code);
+    });
+  });
 }
 
 exports.index = asyncHandler(async (req, res, next) => {
@@ -145,8 +147,7 @@ exports.show_delete_get = asyncHandler(async (req, res, next) => {
 // Handle show delete on POST.
 exports.show_delete_post = asyncHandler(async (req, res, next) => {
   if (req.user) {
-    const show = await Show.findById(req.body.showid);
-    await Show.findByIdAndDelete(show._id);
+    const [show] = await Promise.all([Show.findByIdAndDelete(req.body.showid).exec()]);
     deleteShowCron(show.show_name);
     res.redirect('/');
   }
@@ -200,11 +201,13 @@ exports.show_update_post = [
       return;
     } else {
       if (req.user) {
-        const updatedShow = await Show.findByIdAndUpdate(
+        const [updatedShow] = await Promise.all([Show.findByIdAndUpdate(
           req.params.id,
           show,
           {},
-        );
+        ).exec()]);
+        await deleteShowCron(updatedShow.show_name);
+        newShowCron(show.show_name, show.startHour, show.startMin, show.endHour, show.dayNum, show.day, show.length);
         res.redirect(updatedShow.url);
       }
     }

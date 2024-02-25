@@ -11,7 +11,8 @@ block content
     li #[strong End: ] #{show.end_time}
 
   hr
-  button(class='delete-btn')
-    a(href=show.url+'/delete') Delete Show
-  button(class='update-btn')
-    a(href=show.url+'/update') Update Show
+  if currentUser
+    button(class='delete-btn')
+      a(href=show.url+'/delete') Delete Show
+    button(class='update-btn')
+      a(href=show.url+'/update') Update Show

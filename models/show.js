@@ -37,7 +37,11 @@ ShowSchema.virtual('length').get(function () {
   let endHours = Number(this.end_time.split(':')[0]);
   let endMinutes = Number(this.end_time.split(':')[1]);
 
-  return Math.abs(endHours - startHours) * 60 + Math.abs(endMinutes - startMinutes);
+  if ((endHours - startHours) >= 0) {
+    return Math.abs(endHours - startHours) * 60 + Math.abs(endMinutes - startMinutes);
+  } else {
+    return endHours + (24 - startHours) + Math.abs(endMinutes - startMinutes);
+  }
 });
 
 module.exports = mongoose.model('Show', ShowSchema);

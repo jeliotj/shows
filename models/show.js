@@ -40,7 +40,7 @@ ShowSchema.virtual('length').get(function () {
   if ((endHours - startHours) >= 0) {
     return Math.abs(endHours - startHours) * 60 + Math.abs(endMinutes - startMinutes);
   } else {
-    return endHours + (24 - startHours) + Math.abs(endMinutes - startMinutes);
+    return (endHours + (24 - startHours)) * 60 + Math.abs(endMinutes - startMinutes);
   }
 });
 

@@ -44,5 +44,24 @@ ShowSchema.virtual('length').get(function () {
   }
 });
 
+ShowSchema.virtual('archiveLink').get(function () {
+  let startTime;
+  let endTime;
+  if (this.start_time.split(':')[1] !== '00') {
+    startTime = this.start_time.split(':')[0] + this.start_time.split(':')[1];
+  } else {
+    startTime = this.start_time.split(':')[0];
+  }
+
+  if (this.end_time.split(':')[1] !== '00') {
+    endTime = this.end_time.split(':')[0] + this.end_time.split(':')[1];
+  } else {
+    endTime = this.end_time.split(':')[0];
+  }
+
+  return 'https://local.kbmf.fm/shows/' + this.day + '/' + startTime + '-' + endTime;
+
+});
+
 module.exports = mongoose.model('Show', ShowSchema);
 

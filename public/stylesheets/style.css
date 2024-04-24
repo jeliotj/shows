@@ -259,3 +259,12 @@ label {
   font-weight: 700;
   color: var(--fire-brick);
 }
+
+.show-archive-link {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--fire-brick);
+}

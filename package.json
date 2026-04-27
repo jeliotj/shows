@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "devstart": "nodemon ./bin/www",
+    "devstart": "nodemon --env-file=.env.local ./bin/www",
     "serverstart": "DEBUG=shows:* npm run devstart"
   },
   "dependencies": {
@@ -22,7 +22,7 @@
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
-    "morgan": "~1.9.1",
+    "morgan": "^1.10.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pug": "^3.0.2"
